@@ -31,9 +31,9 @@ namespace FlightControlWeb.DB
             using var cmd2 = new SQLiteCommand("DELETE FROM FlightPlans WHERE Id = '" + id
                 + "';", con);
             await cmd2.ExecuteNonQueryAsync();
-            using var cmd3 = new SQLiteCommand("DELETE FROM FPtoServer WHERE FlightId = '" + id
-                + "';", con);
-            await cmd3.ExecuteNonQueryAsync();
+//            using var cmd3 = new SQLiteCommand("DELETE FROM FPtoServer WHERE FlightId = '" + id
+//                + "';", con);
+//            await cmd3.ExecuteNonQueryAsync();
         }
 
         private async Task<long> GetInitId(string fpId)
