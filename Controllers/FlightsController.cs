@@ -8,6 +8,7 @@ using FlightControlWeb.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
 using FlightControlWeb.DB;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlightControlWeb.Controllers
 {
@@ -59,8 +60,11 @@ namespace FlightControlWeb.Controllers
         {
             foreach (Flight f in flights)
             {
-                f.IsExternal = true;
-                await _flightToServerDb.SaveFlightToServer(f.Id, serverId);
+                if (f != null)
+                {
+                    f.IsExternal = true;
+                    await _flightToServerDb.SaveFlightToServer(f.Id, serverId);
+                }
             }
         }
         [HttpDelete("{id}")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -11,8 +12,10 @@ namespace FlightControlWeb.Models
         public class Segment
         {
             [JsonPropertyName("longitude")]
+            [Range(-180, 180)]
             public Double Longitude { get; set; }
             [JsonPropertyName("latitude")]
+            [Range(-90, 90)]
             public Double Latitude { get; set; }
             [JsonPropertyName("timespan_seconds")]
             public Int32 Time { get; set; }
@@ -21,8 +24,11 @@ namespace FlightControlWeb.Models
         {
 
             [JsonPropertyName("longitude")]
+            [Range(-180, 180)]
+
             public Double InitialLongitude { get; set; }
             [JsonPropertyName("latitude")]
+            [Range(-90, 90)]
             public Double InitialLatitude { get; set; }
             [JsonPropertyName("date_time")]
             public DateTime Date { get; set; }
