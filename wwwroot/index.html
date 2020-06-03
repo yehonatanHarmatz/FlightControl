@@ -27,8 +27,8 @@
             <div class="col-3">
                 <!-- Entering a new flight plan -->
                 <div id="dropArea">
-                    <input type="file" class="custom-file-input" id="jsonFileInput" onchange="uploadJson(this.files)" />
-                    <label class="custom-file-label" for="jsonFileInput">Choose JSON file</label>
+                    <input type="file" class="custom-file-input" id="flightPlanInput" />
+                    <label class="custom-file-label" for="flightPlanInput">Choose JSON file</label>
                 </div>
 
                 <!-- List of flights -->
@@ -69,34 +69,7 @@
     <script src="Scripts/CommunicationWithServer.js"></script>
     <script src="Scripts/FlightsManagement.js"></script>
     <script src="Scripts/FlightsList.js"></script>
+    <script src="Scripts/EnteringFlightPlan.js"></script>
     <script src="Scripts/ClientLogic.js"></script>
-
-    <!-- DRAFT -->
-    <script>
-        function uploadJson(files) {
-            if (files.length > 0) {
-                let fileReader = new FileReader();
-                fileReader.onload = function () {
-                    let flightPlan = JSON.parse(fileReader.result);
-                    console.log(flightPlan);
-                    $.ajax({
-                        url: 'api/FlightPlan',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(flightPlan),
-                        dataType: 'json',
-                        success: function (data) {
-                            alert(data);
-                        },
-                        failure: function (error) {
-                            alert(error);
-                        }
-                    });
-//                    $.post('api/FlightPlan', flightPlan);
-                }
-                fileReader.readAsText(files[0]);
-            }
-        }
-    </script>
 </body>
 </html>

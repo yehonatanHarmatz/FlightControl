@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 function updateFlightsList(flightsToAdd, flightsToRemove) {
     flightsToAdd.forEach(flight => appendToFlightsList(flight));
@@ -6,25 +6,30 @@ function updateFlightsList(flightsToAdd, flightsToRemove) {
 }
 
 function appendToFlightsList(flight) {
-    let row = '<tr id="tableRow' + flight.flight_id + '"><td>'
-        + flight.flight_id + '</td><td>'
-        + flight.company_name;
+    let $flightRow = $('<tr>', { id: 'rowFlight' + flight.flight_id });
+    let $flightIdCell = $('<td>').text(flight.flight_id);
+    let $companyNameCell = $('<td>').text(flight.company_name);
+    $flightRow.append($flightIdCell, $companyNameCell);
+
     if (flight.is_external) {
-        row += '</td></tr>'
-        $('#externalFlightsTable tbody').append(row);
+        $('#externalFlightsTable tbody').append($flightRow);
     } else {
-        row += '<button type="button" class="close" onclick="deleteFlight(\''
-            + flight.flight_id + '\')">&times;</button></td></tr>';
-        $('#internalFlightsTable tbody').append(row);
+        let $deleteFlightButton = $('<button>', {
+            type: 'button',
+            'class': 'close',
+            click: () => deleteFlight(flight.flight_id)
+        }).html('&times;');
+        $companyNameCell.append($deleteFlightButton);
+        $('#internalFlightsTable tbody').append($flightRow);
     }
 }
 
 function removeFromFlightsList(flightId) {
-    $('#tableRow' + flightId).remove();
+    $('#rowFlight' + flightId).remove();
 }
 
 function deleteFlight(flightId) {
-    $('#tableRow' + flightId).fadeOut("fast", () => $(this).remove());
+    $('#rowFlight' + flightId).fadeOut('fast', () => $(this).remove());
     removeFlight(flightId);
     deleteFlightFromServer(flightId);
 }

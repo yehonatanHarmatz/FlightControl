@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 // The flights before the last update.
 let previousFlights = [];
@@ -14,6 +14,7 @@ function updateFlights(newFlights) {
 
 // Gets the flights which were added during the last update.
 function getAddedFlights() {
+    // Return the current flights that were not on the previous flights.
     return currentFlights.filter(function (currentFlight) {
         return previousFlights.every(function (previousFlight) {
             return previousFlight.flight_id !== currentFlight.flight_id;
@@ -23,6 +24,7 @@ function getAddedFlights() {
 
 // Gets the flights which were removed during the last update.
 function getRemovedFlights() {
+    // Return the previous flights that are not on the current flights.
     return previousFlights.filter(function (previousFlight) {
         return currentFlights.every(function (currentFlight) {
             return currentFlight.flight_id !== previousFlight.flight_id;

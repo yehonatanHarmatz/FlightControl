@@ -1,10 +1,10 @@
-﻿"use strict";
+﻿'use strict';
 
 $(document).ready(function () {
     // Refresh data (flights) every 2 seconds.
     setInterval(function () {
         // Get all flights from the server.
-        getAllFlightsFromServer(function (flights) {
+        getActiveFlightsFromServer(function (flights) {
             updateFlights(flights);
 
             // Update the list of flights. Add the new flights and remove
