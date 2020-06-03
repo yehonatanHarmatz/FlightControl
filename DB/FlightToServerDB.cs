@@ -16,6 +16,15 @@ namespace FlightControlWeb.DB
             _connectionString = configuration["ConnectionString"];
         }
 
+        public async Task DeleteFlightToServer(string flightId)
+        {
+            using SQLiteConnection con = new SQLiteConnection(_connectionString);
+            await con.OpenAsync();
+            using var cmd = new SQLiteCommand("DELETE FROM FlightToServer WHERE FlightId = '" + flightId
+                + "';", con);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
         public async Task<bool> IsFlightExternal(string id)
         {
             string serverId = await LoadFlightServer(id);

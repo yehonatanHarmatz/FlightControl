@@ -10,7 +10,7 @@ namespace FlightControlWeb.DB
         public Task<string> LoadFlightServer(string id);
         public Task SaveFlightToServer(string id, string serverID);
         public Task<Boolean> IsFlightExternal(string id);
-
+        public Task DeleteFlightToServer(string flightId);
 
     }
 }

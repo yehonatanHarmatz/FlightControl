@@ -80,7 +80,7 @@ namespace FlightControlWeb.Controllers
                 return BadRequest();
             }
             await _fpDb.DeleteFlight(id);
-            /**TO-DO delete from flight-server**/
+            await _flightToServerDb.DeleteFlightToServer(id);
             return Ok();
         }
 
