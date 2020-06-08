@@ -32,6 +32,10 @@ namespace FlightControlWeb.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Server s)
         {
+            if (!s.IsValid())
+            {
+                return BadRequest("server file is invalid");
+            }
             await _serverDb.SaveServer(s);
             return CreatedAtAction(nameof(GetServers),s);
         }

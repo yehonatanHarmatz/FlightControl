@@ -45,13 +45,29 @@ namespace FlightControlWeb.Controllers
                 return Ok(fp);
             }
             Server s = await _serverDb.LoadServer(serverId);
-            HttpResponseMessage response = await _client.GetAsync(new string(s.Url + "/" + id));
+            HttpResponseMessage response;
+            try
+            {
+                response = await _client.GetAsync(new string(s.Url + "/" + id));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "cant get respone from other server");
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode(500, "problem in the respone from out server");
+            }
             return response;
         }
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] FlightPlan fp)
         {
             fp.Id = await GenerateIdAsync();
+            if (!fp.IsValid())
+            {
+                return BadRequest("flight plan is invalid");
+            }
             await _fpDb.SaveFP(fp);
             await _flightToServerDb.SaveFlightToServer(fp.Id, null);
             return CreatedAtAction("GetFP", new { id = fp.Id }, fp);

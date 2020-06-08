@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,37 +13,69 @@ namespace FlightControlWeb.Models
         public class Segment
         {
             [JsonPropertyName("longitude")]
+            [JsonProperty("longitude")]
             [Range(-180, 180)]
             public Double Longitude { get; set; }
             [JsonPropertyName("latitude")]
+            [JsonProperty("latitude")]
             [Range(-90, 90)]
             public Double Latitude { get; set; }
             [JsonPropertyName("timespan_seconds")]
+            [JsonProperty("timespan_seconds")]
             public Int32 Time { get; set; }
+            public bool IsValid()
+            {
+                return (Longitude <= 180)
+                   && (Longitude >= -180) && (Latitude <= 90)
+                   && (Latitude >= -90);
+            }
         }
         public class InitialLocation
         {
 
             [JsonPropertyName("longitude")]
+            [JsonProperty("longitude")]
             [Range(-180, 180)]
 
             public Double InitialLongitude { get; set; }
             [JsonPropertyName("latitude")]
+            [JsonProperty("latitude")]
             [Range(-90, 90)]
             public Double InitialLatitude { get; set; }
             [JsonPropertyName("date_time")]
+            [JsonProperty("date_time")]
             public DateTime Date { get; set; }
+            public bool IsValid()
+            {
+                return (Date != null) && (InitialLongitude <= 180)
+                   && (InitialLongitude >= -180) && (InitialLatitude <= 90)
+                   && (InitialLatitude >= -90);
+            }
         }
         public string Id { get; set; }
         [JsonPropertyName("company_name")]
+        [JsonProperty("company_name")]
         public string CompanyName { get; set; }
         [JsonPropertyName("passengers")]
+        [JsonProperty("passengers")]
         public int Passengers { get; set; }
         [JsonPropertyName("segments")]
+        [JsonProperty("segments")]
         public List<Segment> Segments { get; set; }
 
         [JsonPropertyName("initial_location")]
+        [JsonProperty("initial_location")]
         public InitialLocation InitLocation { get; set; }
+        public bool IsValid()
+        {
+            bool isSegmentsValid = true;
+            foreach (Segment s in Segments)
+            {
+                isSegmentsValid &= s.IsValid();
+            }
+            return (CompanyName != null) && (InitLocation != null)
+               && InitLocation.IsValid() && isSegmentsValid;
+        }
 
         public Flight ConvertToFlight(DateTime time, Boolean isExternal)
         {
@@ -94,7 +127,7 @@ namespace FlightControlWeb.Models
                 longitude = seg.Longitude;
                 latitude = seg.Latitude;
             }
-            fligt.Longtitude = longitude;
+            fligt.Longitude = longitude;
             fligt.Latitude = latitude;
         }
         private double midpoint(double x1, double x2, double ratio)
