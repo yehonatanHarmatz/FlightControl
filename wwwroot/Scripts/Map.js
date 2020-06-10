@@ -2,8 +2,6 @@
 
 let mymap = L.map('map').setView([20, 0], 2); // the map created
 
-addClickEventToMap(mymap, deemphasizeFlightOnMap); // test-----------------------------
-
 let flights_marker = new Map(); // the current flights' markers
 
 let flights_deg = new Map(); // the current flights' deg
@@ -68,7 +66,6 @@ function addMarker() {
             flight_icon.setRotationAngle(deg); // sets the rotation.
             flight_icon.setRotationOrigin("center");
             flights_deg.set(flight.flight_id, deg);
-            addClickEventToFlightIcon(flight.flight_id, emphasizeFlightOnMap); // test-----------------------------------------
         }
     });
     for(let flight_id of flights_marker.keys()) { // deletes the deleted flights
