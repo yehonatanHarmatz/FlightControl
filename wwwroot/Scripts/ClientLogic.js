@@ -10,6 +10,9 @@ $(document).ready(function () {
             // Update the list of flights. Add the new flights and remove
             // the old ones.
             updateFlightsList(getAddedFlights(), getRemovedFlights());
+            
+            // adds the plane icons
+            addMarker();
         });
     }, 2000);
 });
