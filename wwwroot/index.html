@@ -1,11 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- for the map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin="" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- for the map -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
+    <!-- defines map's size -->
+    <style>
+        body {
+            background-image: url('images/plane_background.jpg');
+        }
+        #map {
+            height: 650px;
+        }
+    </style>
     <title>Flight Control</title>
 </head>
 <body>
@@ -14,8 +31,7 @@
         <div class="row">
             <div class="col-8">
                 <!-- Map @Inbar -->
-                <div class="row border border-primary">
-                    <h1 class="display-1 text-center">Map Placeholder</h1>
+                <div class="row border border-primary" id="map">
                 </div>
 
                 <!-- Flight details -->
@@ -71,5 +87,7 @@
     <script src="Scripts/FlightsList.js"></script>
     <script src="Scripts/EnteringFlightPlan.js"></script>
     <script src="Scripts/ClientLogic.js"></script>
+    <script src="Scripts/Rotation.js"></script>
+    <script src="Scripts/Map.js"></script>
 </body>
 </html>
