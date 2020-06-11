@@ -15,11 +15,15 @@ namespace FlightControlWeb.DB
         {
             _connectionString = configuration["ConnectionString"];
         }
+        /*
+        * return init location with specific id.
+        */
         public async Task<FlightPlan.InitialLocation> LoadInitLocation(long id)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
             await con.OpenAsync();
-            using var cmd = new SQLiteCommand("SELECT * FROM InitLocation WHERE id = '" + id + "';", con);
+            using var cmd =
+                new SQLiteCommand("SELECT * FROM InitLocation WHERE id = '" + id + "';", con);
             using SQLiteDataReader rdr = (SQLiteDataReader)await cmd.ExecuteReaderAsync();
             if (await rdr.ReadAsync())
             {
@@ -31,7 +35,9 @@ namespace FlightControlWeb.DB
             }
             return null;
         }
-
+        /*
+         * save init location in the db.
+         */
         public async Task<long> SaveInitLocation(FlightPlan.InitialLocation init)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);

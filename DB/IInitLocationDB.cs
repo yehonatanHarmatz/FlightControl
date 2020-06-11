@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace FlightControlWeb.DB
 {
+    /*
+     * interface for init location db
+     */
     public interface IInitLocationDB
     {
         public Task<FlightPlan.InitialLocation> LoadInitLocation(long id);

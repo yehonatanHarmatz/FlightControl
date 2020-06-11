@@ -29,6 +29,10 @@ namespace FlightControlWeb.Controllers
             _flightToServerDb = flightToServerDb;
         }
         [HttpGet]
+        /*
+         * return all the flight that's on air.
+         * if sync all appear in the url then the server ask for flight from external servers.
+         */
         public async Task<ActionResult<List<Flight>>> GetFlights(
             [FromQuery(Name ="relative_to")] string relativTo)
         {
@@ -37,45 +41,62 @@ namespace FlightControlWeb.Controllers
             List<Flight> flights = new List<Flight>();
             await foreach(FlightPlan fp in _fpDb.LoadAllFP())
             {
+                if (!fp.IsValid())
+                {
+                    continue;
+                }
                 if (fp.IsOnAir(DateTime.Parse(relativTo).ToUniversalTime()))
                 {
-                    flights.Add(fp.ConvertToFlight(DateTime.Parse(relativTo).ToUniversalTime(), false));
+                    flights.Add(fp.ConvertToFlight(
+                        DateTime.Parse(relativTo).ToUniversalTime(), false));
                 }
             }
             if (syncAll)
             {
-                await foreach (Server s in _serverDb.LoadAllServers())
+                return await HandleExternalServers(relativTo, flightToServer, flights);
+            }
+            await AddFlightsToServers(flightToServer);
+            return flights;
+        }
+        /*
+         * handle the external servers.
+         */
+        private async Task<ActionResult<List<Flight>>> HandleExternalServers(string relativTo,
+            Dictionary<string, string> flightToServer, List<Flight> flights)
+        {
+            foreach (Server s in await _serverDb.LoadAllServers())
+            {
+                HttpResponseMessage response;
+                try
                 {
-                    HttpResponseMessage response;
-                    try
+                    response = await _client.GetAsync(s.Url
+                    + "/api/Flights?relative_to=" + relativTo);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "cant get respone from other server");
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    var resp = await response.Content.ReadAsStringAsync();
+                    List<Flight> serverFlights = JsonConvert.DeserializeObject<List<Flight>>(resp);
+                    if (!HandleOutFlights(serverFlights, s.Id, flightToServer))
                     {
-                        response = await _client.GetAsync(s.Url
-                        + "/api/Flights?relative_to=" + relativTo);
+                        return StatusCode(500, "get invalid flight from other server");
                     }
-                    catch (Exception)
-                    {
-                        return StatusCode(500, "cant get respone from other server");
-                    }
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var resp = await response.Content.ReadAsStringAsync();
-                        List<Flight> serverFlights = JsonConvert.DeserializeObject<List<Flight>>(resp);
-                        if (!HandleOutFlights(serverFlights, s.Id, flightToServer))
-                        {
-                            return StatusCode(500, "get invalif flight from other server");
-                        }
-                        flights.AddRange(serverFlights);
-                    }
-                    else
-                    {
-                        return StatusCode(500, "problem in the response of other server");
-                    }
+                    flights.AddRange(serverFlights);
+                }
+                else
+                {
+                    return StatusCode(500, "problem in the response of other server");
                 }
             }
             await AddFlightsToServers(flightToServer);
             return flights;
         }
-
+        /*
+         * save connection between external server to is flights.
+         */
         private async Task AddFlightsToServers(Dictionary<string, string> flightToServer)
         {
             foreach (KeyValuePair<string, string> entry in flightToServer)
@@ -86,8 +107,11 @@ namespace FlightControlWeb.Controllers
                 }
             }
         }
-
-        private bool HandleOutFlights(List<Flight> flights, string serverId, Dictionary<string, string> flightToServer)
+        /*
+         * handle the external flights of a server.
+         */
+        private bool HandleOutFlights(List<Flight> flights,
+            string serverId, Dictionary<string, string> flightToServer)
         {
             foreach (Flight f in flights)
             {
@@ -95,10 +119,6 @@ namespace FlightControlWeb.Controllers
                 {
                     f.IsExternal = true;
                     flightToServer.Add(f.Id, serverId);
-                    /*if (!await _flightToServerDb.IsFlightExist(f.Id))
-                    {
-                        await _flightToServerDb.SaveFlightToServer(f.Id, serverId);
-                    }*/
                 }
                 else
                 {
@@ -108,6 +128,9 @@ namespace FlightControlWeb.Controllers
             return true;
         }
         [HttpDelete("{id}")]
+        /*
+         * delete flight plan from the server.
+         */
         public async Task<ActionResult> Delete(string id)
         {
             FlightPlan fp = await _fpDb.LoadFP(id);

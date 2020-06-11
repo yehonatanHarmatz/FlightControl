@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using FlightControlWeb.Models;
 namespace FlightControlWeb.DB
 {
+    /*
+     * interface for flight plan db
+     */
     public interface IFlightPlanDB
     {
         public Task<FlightPlan> LoadFP(string id);

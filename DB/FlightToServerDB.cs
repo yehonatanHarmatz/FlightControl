@@ -15,22 +15,29 @@ namespace FlightControlWeb.DB
         {
             _connectionString = configuration["ConnectionString"];
         }
-
+        /*
+         * delete flight to server from the db.
+         */
         public async Task DeleteFlightToServer(string flightId)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
             await con.OpenAsync();
-            using var cmd = new SQLiteCommand("DELETE FROM FlightToServer WHERE FlightId = '" + flightId
+            using var cmd =
+                new SQLiteCommand("DELETE FROM FlightToServer WHERE FlightId = '" + flightId
                 + "';", con);
             await cmd.ExecuteNonQueryAsync();
         }
-
+        /*
+         * check if flight is from extenal srever.
+         */
         public async Task<bool> IsFlightExternal(string id)
         {
             string serverId = await LoadFlightServer(id);
             return serverId != null;
         }
-
+        /*
+         * delete the server of specific flight from the db.
+         */
         public async Task<string> LoadFlightServer(string id)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
@@ -49,6 +56,9 @@ namespace FlightControlWeb.DB
             }
             return "Not Found";
         }
+        /*
+         * check if flight id exist in the db.
+         */
         public async Task<bool> IsFlightExist(string id)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
@@ -62,7 +72,9 @@ namespace FlightControlWeb.DB
             }
             return false;
         }
-
+        /*
+         * save flight to server in the db.
+         */
         public async Task SaveFlightToServer(string id, string serverID)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);

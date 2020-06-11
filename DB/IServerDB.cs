@@ -6,11 +6,14 @@ using FlightControlWeb.Models;
 
 namespace FlightControlWeb.DB
 {
+    /*
+     * interface for server db
+     */
     public interface IServerDB
     {
         public Task DeleteServer(string id);
         public Task SaveServer(Server server);
-        public IAsyncEnumerable<Server> LoadAllServers();
+        public Task<List<Server>> LoadAllServers();
         public Task<Server> LoadServer(string id);
 
 

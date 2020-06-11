@@ -15,6 +15,9 @@ namespace FlightControlWeb.DB
         {
             _connectionString = configuration["ConnectionString"];
         }
+        /*
+         * delete server from the db.
+         */
         public async Task DeleteServer(string id)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
@@ -22,9 +25,12 @@ namespace FlightControlWeb.DB
             using var cmd = new SQLiteCommand("DELETE FROM Servers WHERE Id = '" + id + "';", con);
             await cmd.ExecuteNonQueryAsync();
         }
-
-        public async IAsyncEnumerable<Server> LoadAllServers()
+        /*
+         * return all the servers in the db.
+         */
+        public async Task<List<Server>> LoadAllServers()
         {
+            List<Server> servers = new List<Server>();
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
             await con.OpenAsync();
             using var cmd = new SQLiteCommand("SELECT * FROM Servers", con);
@@ -34,10 +40,13 @@ namespace FlightControlWeb.DB
                 Server s = new Server();
                 s.Id = rdr.GetString(0);
                 s.Url = rdr.GetString(1);
-                yield return s;
+                servers.Add(s);
             }
+            return servers;
         }
-
+        /*
+        * return server with specific id.
+        */
         public async Task<Server> LoadServer(string id)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);
@@ -54,7 +63,9 @@ namespace FlightControlWeb.DB
             }
             return null;
         }
-
+        /*
+         * save server in the db.
+         */
         public async Task SaveServer(Server server)
         {
             using SQLiteConnection con = new SQLiteConnection(_connectionString);

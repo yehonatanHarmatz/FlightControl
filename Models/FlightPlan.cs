@@ -76,9 +76,15 @@ namespace FlightControlWeb.Models
             return (CompanyName != null) && (InitLocation != null)
                && InitLocation.IsValid() && isSegmentsValid;
         }
-
+        /*
+         * convert the flight plan to flight
+         */
         public Flight ConvertToFlight(DateTime time, Boolean isExternal)
         {
+            if (time == null)
+            {
+                return null;
+            }
             Flight flight = new Flight();
             flight.Id = Id;
             flight.CompanyName = CompanyName;
@@ -88,8 +94,15 @@ namespace FlightControlWeb.Models
             CalculateLocation(time, flight);
             return flight;
         }
+        /*
+         * check if flight is "on air" at the time that recived.
+         */
         public bool IsOnAir(DateTime time)
         {
+            if (time == null)
+            {
+                return false;
+            }
             TimeSpan timeSpan = time - InitLocation.Date;
             double timeInSec = timeSpan.TotalSeconds;
             if (timeInSec < 0)
@@ -107,6 +120,10 @@ namespace FlightControlWeb.Models
             }
             return true;
         }
+        /*
+         * calculate the location relative to specific time.
+         * and change flight properties to the result.
+         */
         private void CalculateLocation(DateTime time, Flight fligt)
         {
             TimeSpan timeSpan = time - InitLocation.Date;

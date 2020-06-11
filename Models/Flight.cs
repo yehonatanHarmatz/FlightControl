@@ -30,7 +30,9 @@ namespace FlightControlWeb.Models
         [JsonPropertyName("is_external")]
         [JsonProperty("is_external")]
         public bool IsExternal { get; set; }
-
+        /*
+         * check if valid plan
+         */
         public bool IsValid()
         {
             return (CompanyName != null) && (Id != null) && (Longitude <= 180)

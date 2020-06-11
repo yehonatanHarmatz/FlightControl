@@ -15,6 +15,9 @@ namespace FlightControlWeb.Models
         [JsonPropertyName("ServerUrl")]
         [JsonProperty("ServerUrl")]
         public string Url { get; set; }
+        /*
+         * check if valid.
+         */
         public bool IsValid()
         {
             return Id != null && Url != null;

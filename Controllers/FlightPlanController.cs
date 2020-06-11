@@ -28,6 +28,9 @@ namespace FlightControlWeb.Controllers
             _flightToServerDb = flightToServerDb;
         }
         [HttpGet("{id}")]
+        /*
+         * return flight plan of flight with specific id.
+         */
         public async Task<ActionResult<HttpResponseMessage>> GetFP(string id)
         {
             string serverId = await _flightToServerDb.LoadFlightServer(id);
@@ -61,6 +64,9 @@ namespace FlightControlWeb.Controllers
             return response;
         }
         [HttpPost]
+        /*
+         * get flight plan from the client and save it.
+         */
         public async Task<ActionResult> Post([FromBody] FlightPlan fp)
         {
             fp.Id = await GenerateIdAsync();
@@ -72,7 +78,9 @@ namespace FlightControlWeb.Controllers
             await _flightToServerDb.SaveFlightToServer(fp.Id, null);
             return CreatedAtAction("GetFP", new { id = fp.Id }, fp);
         }
-
+        /*
+         * generate unique readable id.
+         */
         private async Task<string> GenerateIdAsync()
         {
             string id = new string(RandomCharsString(3) + RandomNumsString(5));

@@ -20,16 +20,17 @@ namespace FlightControlWeb.Controllers
             _serverDb = serverDb;
         }
         [HttpGet]
+        /*
+         * return all the servers that connected to the server.
+         */
         public async Task<List<Server>> GetServers()
         {
-            List<Server> servers = new List<Server>();
-            await foreach (Server s in _serverDb.LoadAllServers())
-            {
-                servers.Add(s);
-            }
-            return servers;
+            return await _serverDb.LoadAllServers();
         }
         [HttpPost]
+        /*
+         * save external server that arrived from a client.
+         */
         public async Task<ActionResult> Post([FromBody] Server s)
         {
             if (!s.IsValid())
@@ -40,6 +41,9 @@ namespace FlightControlWeb.Controllers
             return CreatedAtAction(nameof(GetServers),s);
         }
         [HttpDelete("{id}")]
+        /*
+         * stop communicate with specific server.
+         */
         public async Task<ActionResult<Server>> Delete(string id)
         {
             Server s = await _serverDb.LoadServer(id);

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace FlightControlWeb.DB
 {
+    /*
+     * interface for flight to server db
+     */
     public interface IFlightToServerDB
     {
         public Task<string> LoadFlightServer(string id);
