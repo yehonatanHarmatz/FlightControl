@@ -64,12 +64,12 @@ namespace FlightControlWeb.Controllers
         private async Task<ActionResult<List<Flight>>> HandleExternalServers(string relativTo,
             Dictionary<string, string> flightToServer, List<Flight> flights)
         {
-            foreach (Server s in await _serverDb.LoadAllServers())
+            foreach (Server server in await _serverDb.LoadAllServers())
             {
                 HttpResponseMessage response;
                 try
                 {
-                    response = await _client.GetAsync(s.Url
+                    response = await _client.GetAsync(server.Url
                     + "/api/Flights?relative_to=" + relativTo);
                 }
                 catch (Exception)
@@ -80,7 +80,7 @@ namespace FlightControlWeb.Controllers
                 {
                     var resp = await response.Content.ReadAsStringAsync();
                     List<Flight> serverFlights = JsonConvert.DeserializeObject<List<Flight>>(resp);
-                    if (!HandleOutFlights(serverFlights, s.Id, flightToServer))
+                    if (!HandleOutFlights(serverFlights, server.Id, flightToServer))
                     {
                         return StatusCode(500, "get invalid flight from other server");
                     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using FlightControlWeb.Models;
 using System.Net.Http;
 using FlightControlWeb.DB;
+using Newtonsoft.Json;
 
 namespace FlightControlWeb.Controllers
 {
@@ -31,7 +32,7 @@ namespace FlightControlWeb.Controllers
         /*
          * return flight plan of flight with specific id.
          */
-        public async Task<ActionResult<HttpResponseMessage>> GetFP(string id)
+        public async Task<ActionResult<FlightPlan>> GetFP(string id)
         {
             string serverId = await _flightToServerDb.LoadFlightServer(id);
             if (serverId != null && serverId.Equals("Not Found"))
@@ -45,7 +46,7 @@ namespace FlightControlWeb.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(fp);
+                return fp;
             }
             Server s = await _serverDb.LoadServer(serverId);
             HttpResponseMessage response;
@@ -59,9 +60,20 @@ namespace FlightControlWeb.Controllers
             }
             if (!response.IsSuccessStatusCode)
             {
-                return StatusCode(500, "problem in the respone from out server");
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return new 
+                        NotFoundObjectResult("the extarnal server didn't find the flight plan");
+                }
+                return StatusCode(500, "problem in the respone from external server");
             }
-            return response;
+            var resp = await response.Content.ReadAsStringAsync();
+            FlightPlan flightPlan = JsonConvert.DeserializeObject<FlightPlan>(resp);
+            if (flightPlan == null || !flightPlan.IsValid())
+            {
+                return StatusCode(500, "problem in the respone from external server");
+            }
+            return flightPlan;
         }
         [HttpPost]
         /*
