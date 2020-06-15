@@ -12,7 +12,12 @@ function updateFlights(newFlights) {
     currentFlights = newFlights;
 }
 
-// Gets the flights which were added during the last update.
+// Gets all of the current flights.
+function getAllFlights() {
+    return currentFlights;
+}
+
+// Gets the flights that were added in the last update.
 function getAddedFlights() {
     // Return the current flights that were not on the previous flights.
     return currentFlights.filter(function (currentFlight) {
@@ -22,7 +27,7 @@ function getAddedFlights() {
     });
 }
 
-// Gets the flights which were removed during the last update.
+// Gets the flights that were removed in the last update.
 function getRemovedFlights() {
     // Return the previous flights that are not on the current flights.
     return previousFlights.filter(function (previousFlight) {
@@ -35,4 +40,9 @@ function getRemovedFlights() {
 // Removes the flight specified by the given flight-id.
 function removeFlight(flightId) {
     currentFlights = currentFlights.filter(currentFlight => currentFlight.flight_id !== flightId);
+}
+
+// Gets the flight specified by the given flight ID.
+function getFlightById(flightId) {
+    return currentFlights.find(flight => flight.flight_id === flightId);
 }

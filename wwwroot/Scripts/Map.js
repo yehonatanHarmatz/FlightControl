@@ -18,7 +18,7 @@ let planeIcon = L.Icon.extend({ // the plane icon's settings
 let line_style = { // the lines' style
     "color": "#ff7800",
     "weight": 5,
-    "opacity": 0.65
+    "opacity": 0.2
 };
 
 let plane = new planeIcon({iconSize: [30, 30] }); // default plane icon
@@ -105,11 +105,10 @@ function emphasizeFlightOnMap(flight_id) {
  *          1. Changes the plane's icon to return to normal
  *          2. Activates the deleteRoute function for the flight's id.
  */
-function deemphasizeFlightOnMap() {
-    let flight_icon = getFlightIcon(flight_clicked_id); // gets the icon;
+function deemphasizeFlightOnMap(flightId) {
+    let flight_icon = getFlightIcon(flightId); // gets the icon;
     flight_icon.setIcon(plane);
-    deleteRoute(flight_clicked_id);
-    flight_clicked_id = '';
+    deleteRoute();
 }
 
 /*
@@ -141,8 +140,9 @@ function showRoute2(flight_plan) {
             "type": "LineString",
             "coordinates": [[long_1, lat_1], [long_2, lat_2]]
         }
-        let line = L.geoJSON(line_settings, { style: line_style }).addTo(mymap);
-        flight_route[i] = line;
+        let line = L.geoJSON(line_settings, { style: line_style });
+        line.addTo(mymap);
+        flight_route.push(line);
         i++;
         lat_1 = segment.latitude;
         long_1 = segment.longitude;
@@ -155,7 +155,7 @@ function showRoute2(flight_plan) {
  * Details: deletes the current shown route.
  */
 function deleteRoute() {
-    flight_route.forEach(line => { line.remove() });
+    flight_route.forEach(line => { line.remove(); });
     flight_route = [];
 }
 
@@ -187,6 +187,6 @@ function addClickEventToFlightIcon(flight_id, func) {
  * Args: flight's id and a function
  * Details: Adds a click event to the map;
  */
-function addClickEventToMap(map, func) {
-    map.on('click', func);
+function addClickEventToMap(func) {
+    mymap.on('click', func);
 }

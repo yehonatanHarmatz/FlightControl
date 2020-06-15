@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -18,9 +18,11 @@
     <style>
         body {
             background-image: url('images/plane_background.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
         }
         #map {
-            height: 650px;
+            height: 100%;
         }
     </style>
     <title>Flight Control</title>
@@ -30,19 +32,41 @@
         <h1>FLIGHT CONTROL</h1>
         <div class="row">
             <div class="col-8">
-                <!-- Map @Inbar -->
-                <div class="row border border-primary" id="map">
-                </div>
+                <!-- Map -->
+                <div id="map"></div>
 
                 <!-- Flight details -->
-                <div class="row border border-primary">
-                    <h1 class="display-1 text-center">Flight Details Placeholder</h1>
+                <div>
+                    <h2 class="text-center">Flight Details</h2>
+                    <strong>Select a flight to see its preview.</strong>
+                    <table id="flightDetailsTable" hidden>
+                        <tr>
+                            <td>Flight ID:</td>
+                            <td id="flightDetailsId"></td>
+                        </tr>
+                        <tr>
+                            <td>Company:</td>
+                            <td id="flightDetailsCompany"></td>
+                        </tr>
+                        <tr>
+                            <td>Passengers:</td>
+                            <td id="flightDetailsPassengers"></td>
+                        </tr>
+                        <tr>
+                            <td>Longitude:</td>
+                            <td id="flightDetailsLongitude"></td>
+                        </tr>
+                        <tr>
+                            <td>Latitude:</td>
+                            <td id="flightDetailsLatitude"></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
             <div class="col-3">
                 <!-- Entering a new flight plan -->
-                <div id="dropArea">
+                <div>
                     <input type="file" class="custom-file-input" id="flightPlanInput" />
                     <label class="custom-file-label" for="flightPlanInput">Choose JSON file</label>
                 </div>
@@ -51,7 +75,7 @@
                 <div id="flightsTables">
                     <!-- Internal flights -->
                     <div>
-                        <h5 class="text-center">Internal Flights</h5>
+                        <h4 class="text-center">Internal Flights</h4>
                         <table id="internalFlightsTable" class="table table-hover">
                             <thead>
                                 <tr>
@@ -65,7 +89,7 @@
                     </div>
                     <!-- External Flights -->
                     <div>
-                        <h5 class="text-center">External Flights</h5>
+                        <h4 class="text-center">External Flights</h4>
                         <table id="externalFlightsTable" class="table table-hover">
                             <thead>
                                 <tr>
@@ -86,8 +110,9 @@
     <script src="Scripts/FlightsManagement.js"></script>
     <script src="Scripts/FlightsList.js"></script>
     <script src="Scripts/EnteringFlightPlan.js"></script>
-    <script src="Scripts/ClientLogic.js"></script>
     <script src="Scripts/Rotation.js"></script>
     <script src="Scripts/Map.js"></script>
+    <script src="Scripts/FlightSelection.js"></script>
+    <script src="Scripts/ClientLogic.js"></script>
 </body>
 </html>

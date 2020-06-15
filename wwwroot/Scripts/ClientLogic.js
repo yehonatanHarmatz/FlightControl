@@ -13,6 +13,9 @@ $(document).ready(function () {
             
             // adds the plane icons
             addMarker();
+
+            // Enable the selecetion of the current flights.
+            enableSelectionOfFlights(getAllFlights());
         });
     }, 2000);
 });
