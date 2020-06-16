@@ -15,7 +15,7 @@ $(document).ready(function () {
             addMarker();
 
             // Enable the selecetion of the current flights.
-            enableSelectionOfFlights(getAllFlights());
+            enableSelectionOfFlights(getAddedFlights());
         });
     }, 2000);
 });
