@@ -55,14 +55,14 @@ function flightPlanIsValid(flightPlan) {
     if (conatainsAllFields) {
         // Check if the values of the fields are valid.
         // Validate the lonigude and latitude in the initial location.
-        let valuesAreValid = flightPlan.initial_location.longitude > -180
-            && flightPlan.initial_location.longitude < 180
-            && flightPlan.initial_location.latitude > -90
-            && flightPlan.initial_location.latitude < 90
+        let valuesAreValid = flightPlan.initial_location.longitude >= -180
+            && flightPlan.initial_location.longitude <= 180
+            && flightPlan.initial_location.latitude >= -90
+            && flightPlan.initial_location.latitude <= 90
             // Validate the lonigude and latitude in every segment.
             && flightPlan.segments.every(segment => {
-                return segment.longitude > -180 && segment.longitude < 180
-                    && segment.latitude > -90 && segment.latitude < 90;
+                return segment.longitude >= -180 && segment.longitude <= 180
+                    && segment.latitude >= -90 && segment.latitude <= 90;
             });
 
         return valuesAreValid;

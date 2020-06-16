@@ -57,7 +57,7 @@ function selectFlight(flight) {
 
     // Display the selected flight's details. Notice: we use the most recent
     // value we got from the server because the flight can change its position.
-    showFlightDetails(getFlightById(flight.flightId));
+    showFlightDetails(getFlightById(flight.flight_id));
 }
 
 // Hides the flight details section.
