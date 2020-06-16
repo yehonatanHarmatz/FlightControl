@@ -40,6 +40,10 @@ function cancelFlightSelection() {
 
 // Selects the flight with the given flight.
 function selectFlight(flight) {
+    if (wasRemoved(flight.flight_id)) {
+        return;
+    }
+
     // Check if there is a selected flight already.
     if (selectedFlight) {
         cancelFlightSelection();
@@ -78,4 +82,15 @@ function showFlightDetails(flight) {
 // flight ID is selected or not.
 function isSelectedFlight(flightId) {
     return selectedFlight && flightId === selectedFlight.flight_id;
+}
+
+// Cancel the selection of a removed flight (most likely removed externaly).
+function checkSelectionOfRemovedFlights(removedFlights) {
+    removedFlights.forEach(flight => {
+        if (isSelectedFlight(flight)) {
+            // Cancel the selection of that flight.
+            hideFlightDetails()
+            selectedFlight = null;
+        }
+    })
 }

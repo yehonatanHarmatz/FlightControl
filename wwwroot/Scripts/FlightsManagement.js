@@ -6,10 +6,16 @@ let previousFlights = [];
 // The current flights.
 let currentFlights = [];
 
+// The removed flights.
+let removedFlights = [];
+
 // Updates the flights to the new ones.
 function updateFlights(newFlights) {
     previousFlights = currentFlights;
     currentFlights = newFlights;
+    removedFlights = [];
+
+    checkSelectionOfRemovedFlights(getRemovedFlights());
 }
 
 // Gets all of the current flights.
@@ -39,10 +45,18 @@ function getRemovedFlights() {
 
 // Removes the flight specified by the given flight-id.
 function removeFlight(flightId) {
+    // Remove the flight.
     currentFlights = currentFlights.filter(currentFlight => currentFlight.flight_id !== flightId);
+    removedFlights.push(flightId);
 }
 
 // Gets the flight specified by the given flight ID.
 function getFlightById(flightId) {
     return currentFlights.find(flight => flight.flight_id === flightId);
+}
+
+// Check if the flight specified by the given flight ID was removed
+// since the last update.
+function wasRemoved(flightId) {
+    return removedFlights.includes(flightId);
 }

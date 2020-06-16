@@ -18,7 +18,7 @@ let planeIcon = L.Icon.extend({ // the plane icon's settings
 let line_style = { // the lines' style
     "color": "#ff7800",
     "weight": 5,
-    "opacity": 0.2
+    "opacity": 0.65
 };
 
 let plane = new planeIcon({iconSize: [30, 30] }); // default plane icon
@@ -48,13 +48,13 @@ function addMarker() {
         let new_long = flight.longitude; // the current longitude of the plane
         let old_lat; // the old latitude
         let old_long; // the old longitude
-        if (getFlightIcon(flight.flight_id) == -1) { // this is a new plane
+        if (getFlightIcon(flight.flight_id) === -1) { // this is a new plane
             flight_icon = L.marker([new_lat, new_long], { icon: plane }).addTo(mymap); // creates the icon
             flights_marker.set(flight.flight_id, flight_icon); // adds to map with the flight's id
             flights_deg.set(flight.flight_id, 0); // adds to map with the flight's id
         } else {
             previousFlights.forEach(old_flight => { // goes on each old flight
-                if (old_flight.flight_id == flight.flight_id) { // if this is the same plane as this current plane
+                if (old_flight.flight_id === flight.flight_id) { // if this is the same plane as this current plane
                     old_lat = old_flight.latitude; // sets the old latitude
                     old_long = old_flight.longitude; // sets the old longitude
                 }
@@ -71,18 +71,21 @@ function addMarker() {
     for(let flight_id of flights_marker.keys()) { // deletes the deleted flights
         let delete_flight = 1;
         currentFlights.forEach(flight => {
-            if (flight_id == flight.flight_id) {
+            if (flight_id === flight.flight_id) {
                 delete_flight = 0;
             }
         });
-        if (delete_flight == 1) {
-            if (flight_id == flight_clicked_id) {
-                deemphasizeFlightOnMap();
-            }
+        if (delete_flight === 1) {
             (flights_marker.get(flight_id)).remove();
             flights_marker.delete(flight_id);
         }
     };
+}
+
+// Removes the plane of the flight specified by the given flight ID from the map.
+function removePlane(flightId) {
+    (flights_marker.get(flightId)).remove();
+    flights_marker.delete(flightId);
 }
 
 /*
@@ -118,7 +121,7 @@ function deemphasizeFlightOnMap(flightId) {
  */
 function showRoute(flight_id) {
     currentFlights.forEach(cur_flight => {
-        if (cur_flight.flight_id == flight_id) {
+        if (cur_flight.flight_id === flight_id) {
             getFlightPlanFromServer(cur_flight.flight_id, showRoute2);
         }
     });

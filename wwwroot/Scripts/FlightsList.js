@@ -54,10 +54,19 @@ function deleteFlight(event, flightId) {
     if (isSelectedFlight(flightId)) {
         // Cancel its selection.
         cancelFlightSelection();
+
+        // Remove the plane of the flight from the map.
+        removePlane(flightId);
     }
 
     // Delete the flight from the server.
-    deleteFlightFromServer(flightId);
+    deleteFlightFromServer(
+        flightId,
+        // Define what to do on success.
+        () => {
+            $('#logText').text('The flight with the id ' + flightId + ' was deleted successfully.');
+        }
+    );
 }
 
 // Registers an event handler for the click event of the row of the flight
