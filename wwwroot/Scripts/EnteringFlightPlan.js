@@ -42,13 +42,33 @@ function flightPlanIsValid(flightPlan) {
     let initialLocationProperties = ['longitude', 'latitude', 'date_time'];
     let segmentsProperties = ['longitude', 'latitude', 'timespan_seconds'];
 
-    // Check if all those properies are defined inside the flight plan.
-    return mainProperies.every(property => property in flightPlan)
+    // Check if the flight plan contains all the requaired fields.
+    let conatainsAllFields = mainProperies.every(property => property in flightPlan)
+        // Fileds of initial location.
         && initialLocationProperties.every(property => property in flightPlan.initial_location)
+        // Fileds of every segment.
         && Array.isArray(flightPlan.segments)
         && flightPlan.segments.every(segment => {
             return segmentsProperties.every(property => property in segment);
         });
+
+    if (conatainsAllFields) {
+        // Check if the values of the fields are valid.
+        // Validate the lonigude and latitude in the initial location.
+        let valuesAreValid = flightPlan.initial_location.longitude > -180
+            && flightPlan.initial_location.longitude < 180
+            && flightPlan.initial_location.latitude > -90
+            && flightPlan.initial_location.latitude < 90
+            // Validate the lonigude and latitude in every segment.
+            && flightPlan.segments.every(segment => {
+                return segment.longitude > -180 && segment.longitude < 180
+                    && segment.latitude > -90 && segment.latitude < 90;
+            });
+
+        return valuesAreValid;
+    }
+
+    return false;
 }
 
 $(document).ready(function () {
