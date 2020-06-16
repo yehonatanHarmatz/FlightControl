@@ -35,7 +35,8 @@ namespace FlightControlWeb.Models
          */
         public bool IsValid()
         {
-            return (CompanyName != null) && (Id != null) && (Longitude <= 180)
+            return (CompanyName != null) && (Id != null) &&
+                   (Date != null) && (Longitude <= 180)
                    && (Longitude >= -180) && (Latitude <= 90)
                    && (Latitude >= -90);
         }

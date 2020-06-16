@@ -68,10 +68,13 @@ namespace FlightControlWeb.Models
         public InitialLocation InitLocation { get; set; }
         public bool IsValid()
         {
-            bool isSegmentsValid = true;
-            foreach (Segment s in Segments)
+            bool isSegmentsValid = (Segments != null);
+            if (isSegmentsValid)
             {
-                isSegmentsValid &= s.IsValid();
+                foreach (Segment segment in Segments)
+                {
+                    isSegmentsValid &= segment.IsValid();
+                }
             }
             return (CompanyName != null) && (InitLocation != null)
                && InitLocation.IsValid() && isSegmentsValid;

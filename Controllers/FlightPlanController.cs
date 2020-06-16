@@ -48,11 +48,11 @@ namespace FlightControlWeb.Controllers
                 }
                 return fp;
             }
-            Server s = await _serverDb.LoadServer(serverId);
+            Server server = await _serverDb.LoadServer(serverId);
             HttpResponseMessage response;
             try
             {
-                response = await _client.GetAsync(new string(s.Url + "/" + id));
+                response = await _client.GetAsync(new string(server.Url + "/" + id));
             }
             catch (Exception)
             {

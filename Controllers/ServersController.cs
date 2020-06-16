@@ -31,14 +31,14 @@ namespace FlightControlWeb.Controllers
         /*
          * save external server that arrived from a client.
          */
-        public async Task<ActionResult> Post([FromBody] Server s)
+        public async Task<ActionResult> Post([FromBody] Server server)
         {
-            if (!s.IsValid())
+            if (!server.IsValid())
             {
                 return BadRequest("server file is invalid");
             }
-            await _serverDb.SaveServer(s);
-            return CreatedAtAction(nameof(GetServers),s);
+            await _serverDb.SaveServer(server);
+            return CreatedAtAction(nameof(GetServers),server);
         }
         [HttpDelete("{id}")]
         /*
@@ -46,13 +46,13 @@ namespace FlightControlWeb.Controllers
          */
         public async Task<ActionResult<Server>> Delete(string id)
         {
-            Server s = await _serverDb.LoadServer(id);
-            if (s == null)
+            Server server = await _serverDb.LoadServer(id);
+            if (server == null)
             {
                 return NotFound();
             }
             await _serverDb.DeleteServer(id);
-            return s;
+            return server;
         }
     }
 }

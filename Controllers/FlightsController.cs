@@ -113,12 +113,12 @@ namespace FlightControlWeb.Controllers
         private bool HandleOutFlights(List<Flight> flights,
             string serverId, Dictionary<string, string> flightToServer)
         {
-            foreach (Flight f in flights)
+            foreach (Flight flight in flights)
             {
-                if (f != null && f.IsValid())
+                if (flight != null && flight.IsValid())
                 {
-                    f.IsExternal = true;
-                    flightToServer.Add(f.Id, serverId);
+                    flight.IsExternal = true;
+                    flightToServer.Add(flight.Id, serverId);
                 }
                 else
                 {

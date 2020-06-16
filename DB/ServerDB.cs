@@ -37,10 +37,10 @@ namespace FlightControlWeb.DB
             using SQLiteDataReader rdr = (SQLiteDataReader)await cmd.ExecuteReaderAsync();
             while (await rdr.ReadAsync())
             {
-                Server s = new Server();
-                s.Id = rdr.GetString(0);
-                s.Url = rdr.GetString(1);
-                servers.Add(s);
+                Server server = new Server();
+                server.Id = rdr.GetString(0);
+                server.Url = rdr.GetString(1);
+                servers.Add(server);
             }
             return servers;
         }
@@ -56,10 +56,10 @@ namespace FlightControlWeb.DB
             using SQLiteDataReader rdr = (SQLiteDataReader)await cmd.ExecuteReaderAsync();
             if (rdr.Read())
             {
-                Server s = new Server();
-                s.Id = rdr.GetString(0);
-                s.Url = rdr.GetString(1);
-                return s;
+                Server server = new Server();
+                server.Id = rdr.GetString(0);
+                server.Url = rdr.GetString(1);
+                return server;
             }
             return null;
         }
