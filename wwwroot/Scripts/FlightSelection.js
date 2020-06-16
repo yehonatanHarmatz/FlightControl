@@ -55,8 +55,9 @@ function selectFlight(flight) {
     // Emphasize the selected flight on the map.
     emphasizeFlightOnMap(flight.flight_id);
 
-    // Display the selected flight's details.
-    showFlightDetails(flight);
+    // Display the selected flight's details. Notice: we use the most recent
+    // value we got from the server because the flight can change its position.
+    showFlightDetails(getFlightById(flight.flightId));
 }
 
 // Hides the flight details section.
