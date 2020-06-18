@@ -52,7 +52,8 @@ namespace FlightControlWeb.Controllers
             HttpResponseMessage response;
             try
             {
-                response = await _client.GetAsync(new string(server.Url + "/" + id));
+                response =
+                    await _client.GetAsync(new string(server.Url + "/api/FlightPlan/" + id));
             }
             catch (Exception)
             {

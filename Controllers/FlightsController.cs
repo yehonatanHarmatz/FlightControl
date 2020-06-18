@@ -64,6 +64,8 @@ namespace FlightControlWeb.Controllers
         private async Task<ActionResult<List<Flight>>> HandleExternalServers(string relativTo,
             Dictionary<string, string> flightToServer, List<Flight> flights)
         {
+            string resp;
+            List<Flight> serverFlights;
             foreach (Server server in await _serverDb.LoadAllServers())
             {
                 HttpResponseMessage response;
@@ -78,18 +80,18 @@ namespace FlightControlWeb.Controllers
                 }
                 if (response.IsSuccessStatusCode)
                 {
-                    var resp = await response.Content.ReadAsStringAsync();
-                    List<Flight> serverFlights = JsonConvert.DeserializeObject<List<Flight>>(resp);
-                    if (!HandleOutFlights(serverFlights, server.Id, flightToServer))
-                    {
-                        return StatusCode(500, "get invalid flight from other server");
-                    }
-                    flights.AddRange(serverFlights);
+                    resp = await response.Content.ReadAsStringAsync();
+                    serverFlights = JsonConvert.DeserializeObject<List<Flight>>(resp);
                 }
                 else
                 {
                     return StatusCode(500, "problem in the response of other server");
                 }
+                if (!HandleOutFlights(serverFlights, server.Id, flightToServer))
+                {
+                    return StatusCode(500, "get invalid flight from other server");
+                }
+                flights.AddRange(serverFlights);
             }
             await AddFlightsToServers(flightToServer);
             return flights;
