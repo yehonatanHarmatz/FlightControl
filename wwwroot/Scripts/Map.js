@@ -11,7 +11,7 @@ let flight_route = []; // the route of the current
 
 let planeIcon = L.Icon.extend({ // the plane icon's settings
     options: {
-        iconUrl: 'images/airplane.png'
+        iconUrl: 'Images/airplane.png'
     }
 });
 
@@ -90,15 +90,15 @@ function removePlane(flightId) {
 
 /*
  * Name: emphasizeFlightOnMap
- * Args: flight's id
+ * Args: flight's id and its flight plan
  * Details: does the following actions to the flight(with the given id):
  *          1. Changes the plane's icon to the big red one.
  *          2. Activates the showRoute function for the flight's id.
  */
-function emphasizeFlightOnMap(flight_id) {
+function emphasizeFlightOnMap(flight_id, flightPlan) {
     let flight_icon = getFlightIcon(flight_id); // gets the icon;
     flight_icon.setIcon(big_plane);
-    showRoute(flight_id);
+    showRoute(flightPlan);
 }
 
 /*
@@ -117,21 +117,9 @@ function deemphasizeFlightOnMap(flightId) {
 /*
  * Name: showRoute
  * Args: flight's id
- * Details: shows the route of the flight with this id.
- */
-function showRoute(flight_id) {
-    currentFlights.forEach(cur_flight => {
-        if (cur_flight.flight_id === flight_id) {
-            getFlightPlanFromServer(cur_flight.flight_id, showRoute2);
-        }
-    });
-}
-/*
- * Name: showRoute2
- * Args: flight's id
  * Details: being called to contine the route creation
  */
-function showRoute2(flight_plan) {
+function showRoute(flight_plan) {
     let i = 0; // counter
     let lat_1, lat_2, long_1, long_2;
     lat_1 = flight_plan.initial_location.latitude;

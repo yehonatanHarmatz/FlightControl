@@ -18,16 +18,14 @@ function enterFlightPlan() {
                 postFlightPlanToServer(
                     flightPlan,
                     // Define what to do on success.
-                    () => {
-                        $('#logText').text('The flight plan from the file "'
-                            + jsonFile.name + '" was entered successfully.');
-                    }
+                    () => displayLog('The flight plan from the file "'
+                        + jsonFile.name + '" was successfully entered.')
                 );
             } else {
-                $('#logText').text('The flight plan from file "' + jsonFile.name + '" is invalid.');
+                displayLog('The flight plan from file "' + jsonFile.name + '" is invalid.');
             }
         } catch (e) {
-            $('#logText').text('The file "' + jsonFile.name + '" is not a valid JSON file.');
+            displayLog('The file "' + jsonFile.name + '" is not a valid JSON file.');
         }
     }
 

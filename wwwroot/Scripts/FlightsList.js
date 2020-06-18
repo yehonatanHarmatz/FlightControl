@@ -63,9 +63,7 @@ function deleteFlight(event, flightId) {
     deleteFlightFromServer(
         flightId,
         // Define what to do on success.
-        () => {
-            $('#logText').text('The flight with the id ' + flightId + ' was deleted successfully.');
-        }
+        () => displayLog('The flight with the id ' + flightId + ' was successfully deleted.')
     );
 }
 
