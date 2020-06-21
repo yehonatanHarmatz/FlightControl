@@ -82,6 +82,7 @@ function showFlightDetails(flight, flightPlan) {
 
     // Calculate the departure and landing times.
     let departureTime = new Date(flightPlan.initial_location.date_time);
+    let depaatureTimeAsString = departureTime.toUTCString();
 
     let landingTime = departureTime;
     flightPlan.segments.forEach(
@@ -95,7 +96,7 @@ function showFlightDetails(flight, flightPlan) {
     $('#flightDetailsCompany').text(flight.company_name);
     $('#flightDetailsPassengers').text(flight.passengers);
     $('#flightDetailsInitialLocation').text(initialLocation);
-    $('#flightDetailsDepartureTime').text(departureTime.toUTCString());
+    $('#flightDetailsDepartureTime').text(depaatureTimeAsString);
     $('#flightDetailsDestination').text(destination);
     $('#flightDetailsLandingTime').text(landingTime.toUTCString());
 
